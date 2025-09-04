@@ -353,23 +353,40 @@
         let musicPlaying = false;
         
         function toggleMusic() {
-            const audio = document.getElementById('birthdaySong');
             const button = document.querySelector('.play-button');
             
             if (musicPlaying) {
-                audio.pause();
                 button.textContent = '🎵 Play Birthday Song 🎵';
                 musicPlaying = false;
             } else {
                 // Create a simple birthday tune using Web Audio API
-                createBirthdayTune();
-                button.textContent = '⏸️ Pause Song ⏸️';
-                musicPlaying = true;
+                try {
+                    createBirthdayTune();
+                    button.textContent = '⏸️ Pause Song ⏸️';
+                    musicPlaying = true;
+                } catch (error) {
+                    // Fallback for browsers that don't support Web Audio
+                    button.textContent = '🎵 Happy Birthday! 🎵';
+                    setTimeout(() => {
+                        button.textContent = '🎵 Play Birthday Song 🎵';
+                    }, 3000);
+                }
             }
         }
 
         function createBirthdayTune() {
+            // Check if AudioContext is available
+            if (!window.AudioContext && !window.webkitAudioContext) {
+                throw new Error('Web Audio API not supported');
+            }
+            
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Resume context if suspended (required by many browsers)
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            
             const notes = [
                 {freq: 264, duration: 0.5}, // C4
                 {freq: 264, duration: 0.5}, // C4
@@ -399,7 +416,7 @@
                 oscillator.type = 'sine';
                 
                 gainNode.gain.setValueAtTime(0, currentTime);
-                gainNode.gain.linearRampToValueAtTime(0.3, currentTime + 0.01);
+                gainNode.gain.linearRampToValueAtTime(0.2, currentTime + 0.01);
                 gainNode.gain.exponentialRampToValueAtTime(0.001, currentTime + note.duration);
                 
                 oscillator.start(currentTime);
@@ -410,29 +427,56 @@
 
             // Reset button after song ends
             setTimeout(() => {
-                document.querySelector('.play-button').textContent = '🎵 Play Birthday Song 🎵';
-                musicPlaying = false;
+                const button = document.querySelector('.play-button');
+                if (button) {
+                    button.textContent = '🎵 Play Birthday Song 🎵';
+                    musicPlaying = false;
+                }
             }, currentTime * 1000);
         }
 
         function loadImage(input, photoNumber) {
             if (input.files && input.files[0]) {
+                const file = input.files[0];
+                
+                // Check file size (limit to 2MB for better performance)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('Please choose an image smaller than 2MB');
+                    return;
+                }
+                
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please choose an image file');
+                    return;
+                }
+                
                 const reader = new FileReader();
                 
                 reader.onload = function(e) {
                     const placeholder = document.getElementById('placeholder' + photoNumber);
                     const imageData = e.target.result;
                     
-                    // Display the image
-                    placeholder.innerHTML = '<img src="' + imageData + '" alt="Birthday Memory ' + photoNumber + '">';
-                    
-                    // Save to memory storage (survives refresh)
-                    const photos = getStoredPhotos();
-                    photos['photo' + photoNumber] = imageData;
-                    storePhotos(photos);
+                    if (placeholder) {
+                        // Display the image
+                        placeholder.innerHTML = '<img src="' + imageData + '" alt="Birthday Memory ' + photoNumber + '">';
+                        
+                        // Save to memory storage (survives refresh)
+                        try {
+                            const photos = getStoredPhotos();
+                            photos['photo' + photoNumber] = imageData;
+                            storePhotos(photos);
+                        } catch (error) {
+                            console.log('Could not store photo:', error);
+                        }
+                    }
                 }
                 
-                reader.readAsDataURL(input.files[0]);
+                reader.onerror = function() {
+                    alert('Error reading the image file');
+                }
+                
+                reader.readAsDataURL(file);
             }
         }
 
@@ -473,38 +517,4 @@
         }
 
         // Create floating hearts
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDelay = Math.random() * 2 + 's';
-            document.getElementById('hearts').appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 4000);
-        }
-
-        // Create confetti
-        function createConfetti() {
-            const confetti = document.createElement('div');
-            confetti.classList.add('confetti-piece');
-            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.animationDelay = Math.random() * 2 + 's';
-            document.getElementById('confetti').appendChild(confetti);
-
-            setTimeout(() => {
-                confetti.remove();
-            }, 3000);
-        }
-
-        // Start animations
-        setInterval(createHeart, 1000);
-        setInterval(createConfetti, 300);
-
-        // Preload images
-        const imageData = [
-            'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAH0ASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZna
+        functi
