@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Juhi! 🎉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .birthday-title {
+            font-size: 3.5rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        .birthday-subtitle {
+            font-size: 1.5rem;
+            color: #f0f0f0;
+            margin-bottom: 30px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .music-controls {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .play-button {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .play-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .photo-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: #2d3436;
+            margin-bottom: 15px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .photo-placeholder input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .photo-caption {
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .wishes-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .wishes-title {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .wish {
+            color: #f0f0f0;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .confetti {
+            position: fixed;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff6b6b;
+            font-size: 2rem;
+            animation: float-up 4s linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            font-size: 1.1rem;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .birthday-title {
+                font-size: 2.5rem;
+            }
+            .photo-gallery {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="hearts"></div>
+    <div class="confetti" id="confetti"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="birthday-title">🎉 Happy Birthday Juhi! 🎂</h1>
+            <p class="birthday-subtitle">Wishing you a day filled with happiness and a year filled with joy!</p>
+        </div>
+
+        <div class="music-controls">
+            <button class="play-button" onclick="toggleMusic()">🎵 Play Birthday Song 🎵</button>
+            <audio id="birthdaySong" loop>
+                <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmsfCTuBzvLZiTYIG2m98OScTgwNUarm7bllHgg2jdXyzn0vBSF+zPLaizsIGGS/8+OZUBALT6zn77RnHAU1k9nyz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nzz3wvBSJ+zPPbizwIGGS/8+OZUAoMTqzn77RmHQU2k9nz" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <div class="photo-gallery">
+            <div class="photo-card">
+                <div class="photo-placeholder" onclick="document.getElementById('photo1').click()">
+                    <input type="file" id="photo1" accept="image/*" onchange="loadImage(this, 1)">
+                    <span id="placeholder1">📸 Add Photo 1<br>Click to upload</span>
+                </div>
+                <div class="photo-caption">Memory #1</div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-placeholder" onclick="document.getElementById('photo2').click()">
+                    <input type="file" id="photo2" accept="image/*" onchange="loadImage(this, 2)">
+                    <span id="placeholder2">📸 Add Photo 2<br>Click to upload</span>
+                </div>
+                <div class="photo-caption">Memory #2</div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-placeholder" onclick="document.getElementById('photo3').click()">
+                    <input type="file" id="photo3" accept="image/*" onchange="loadImage(this, 3)">
+                    <span id="placeholder3">📸 Add Photo 3<br>Click to upload</span>
+                </div>
+                <div class="photo-caption">Memory #3</div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-placeholder" onclick="document.getElementById('photo4').click()">
+                    <input type="file" id="photo4" accept="image/*" onchange="loadImage(this, 4)">
+                    <span id="placeholder4">📸 Add Photo 4<br>Click to upload</span>
+                </div>
+                <div class="photo-caption">Memory #4</div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-placeholder" onclick="document.getElementById('photo5').click()">
+                    <input type="file" id="photo5" accept="image/*" onchange="loadImage(this, 5)">
+                    <span id="placeholder5">📸 Add Photo 5<br>Click to upload</span>
+                </div>
+                <div class="photo-caption">Memory #5</div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-placeholder" onclick="document.getElementById('photo6').click()">
+                    <input type="file" id="photo6" accept="image/*" onchange="loadImage(this, 6)">
+                    <span id="placeholder6">📸 Add Photo 6<br>Click to upload</span>
+                </div>
+                <div class="photo-caption">Memory #6</div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-placeholder" onclick="document.getElementById('photo7').click()">
+                    <input type="file" id="photo7" accept="image/*" onchange="loadImage(this, 7)">
+                    <span id="placeholder7">📸 Add Photo 7<br>Click to upload</span>
+                </div>
+                <div class="photo-caption">Memory #7</div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-placeholder" onclick="document.getElementById('photo8').click()">
+                    <input type="file" id="photo8" accept="image/*" onchange="loadImage(this, 8)">
+                    <span id="placeholder8">📸 Add Photo 8<br>Click to upload</span>
+                </div>
+                <div class="photo-caption">Memory #8</div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-placeholder" onclick="document.getElementById('photo9').click()">
+                    <input type="file" id="photo9" accept="image/*" onchange="loadImage(this, 9)">
+                    <span id="placeholder9">📸 Add Photo 9<br>Click to upload</span>
+                </div>
+                <div class="photo-caption">Memory #9</div>
+            </div>
+
+            <div class="photo-card">
+                <div class="photo-placeholder" onclick="document.getElementById('photo10').click()">
+                    <input type="file" id="photo10" accept="image/*" onchange="loadImage(this, 10)">
+                    <span id="placeholder10">📸 Add Photo 10<br>Click to upload</span>
+                </div>
+                <div class="photo-caption">Memory #10</div>
+            </div>
+        </div>
+
+        <div class="wishes-section">
+            <h2 class="wishes-title">🌟 Special Birthday Wishes 🌟</h2>
+            <div class="wish">
+                "May this special day bring you endless joy, countless blessings, and all the happiness your heart can hold. Happy Birthday, Juhi! 🎈✨"
+            </div>
+        </div>
+
+        <div class="footer">
+            Made with ❤️ for Juhi's Special Day
+        </div>
+    </div>
+
+    <script>
+        let musicPlaying = false;
+        
+        function toggleMusic() {
+            const audio = document.getElementById('birthdaySong');
+            const button = document.querySelector('.play-button');
+            
+            if (musicPlaying) {
+                audio.pause();
+                button.textContent = '🎵 Play Birthday Song 🎵';
+                musicPlaying = false;
+            } else {
+                // Create a simple birthday tune using Web Audio API
+                createBirthdayTune();
+                button.textContent = '⏸️ Pause Song ⏸️';
+                musicPlaying = true;
+            }
+        }
+
+        function createBirthdayTune() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const notes = [
+                {freq: 264, duration: 0.5}, // C4
+                {freq: 264, duration: 0.5}, // C4
+                {freq: 297, duration: 1},   // D4
+                {freq: 264, duration: 1},   // C4
+                {freq: 352, duration: 1},   // F4
+                {freq: 330, duration: 2},   // E4
+                // Happy birthday to you
+                {freq: 264, duration: 0.5}, // C4
+                {freq: 264, duration: 0.5}, // C4
+                {freq: 297, duration: 1},   // D4
+                {freq: 264, duration: 1},   // C4
+                {freq: 396, duration: 1},   // G4
+                {freq: 352, duration: 2},   // F4
+            ];
+
+            let currentTime = audioContext.currentTime;
+            
+            notes.forEach(note => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = note.freq;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0, currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, currentTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, currentTime + note.duration);
+                
+                oscillator.start(currentTime);
+                oscillator.stop(currentTime + note.duration);
+                
+                currentTime += note.duration;
+            });
+
+            // Reset button after song ends
+            setTimeout(() => {
+                document.querySelector('.play-button').textContent = '🎵 Play Birthday Song 🎵';
+                musicPlaying = false;
+            }, currentTime * 1000);
+        }
+
+        function loadImage(input, photoNumber) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const placeholder = document.getElementById('placeholder' + photoNumber);
+                    placeholder.innerHTML = '<img src="' + e.target.result + '" alt="Birthday Memory ' + photoNumber + '">';
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            document.getElementById('hearts').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        // Create confetti
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti-piece');
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            document.getElementById('confetti').appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.remove();
+            }, 3000);
+        }
+
+        // Start animations
+        setInterval(createHeart, 1000);
+        setInterval(createConfetti, 300);
+
+        // Preload images
+        const imageData = [
+            'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAH0ASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/Z', // Placeholder for first image
+            null, null, null, null, null, null, null, null, null // Will be replaced with actual images
+        ];
+
+        // Auto play celebration on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(createConfetti, i * 100);
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
