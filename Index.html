@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     Birthday Juhi!  🎉</title>
+    <title>Happy Birthday Juhi! 🎉</title>
     <style>
         * {
             margin: 0;
@@ -342,13 +342,11 @@
         <div class="wishes-section">
             <h2 class="wishes-title">🌟 Special Birthday Wishes 🌟</h2>
             <div class="wish">
-                "May this special day bring you endless joy, countless blessings, and all the happiness your heart can hold. Happy Birthday, Juhi! 🎈✨"
+                "Happy Birthday Juhi! I want you to stay happy, healthy, and I always want to see you grow in your life. May God bless you with whatever you want. You have very vibrant energy - please keep it and make people smile who are around you. Always keep your beautiful smile that lights up every room you enter. Wishing you a year filled with dreams coming true and moments that make your heart sing!"
             </div>
         </div>
 
-        <div class="footer">
-            Made with ❤️ for Juhi's Special Day
-        </div>
+
     </div>
 
     <script>
@@ -423,10 +421,54 @@
                 
                 reader.onload = function(e) {
                     const placeholder = document.getElementById('placeholder' + photoNumber);
-                    placeholder.innerHTML = '<img src="' + e.target.result + '" alt="Birthday Memory ' + photoNumber + '">';
+                    const imageData = e.target.result;
+                    
+                    // Display the image
+                    placeholder.innerHTML = '<img src="' + imageData + '" alt="Birthday Memory ' + photoNumber + '">';
+                    
+                    // Save to memory storage (survives refresh)
+                    const photos = getStoredPhotos();
+                    photos['photo' + photoNumber] = imageData;
+                    storePhotos(photos);
                 }
                 
                 reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function storePhotos(photos) {
+            // Store in a way that persists across page refreshes
+            try {
+                const photosJson = JSON.stringify(photos);
+                document.cookie = `birthday_photos=${encodeURIComponent(photosJson)}; path=/; max-age=86400`; // 24 hours
+            } catch (e) {
+                console.log('Storage limit reached');
+            }
+        }
+
+        function getStoredPhotos() {
+            try {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    const [name, value] = cookie.trim().split('=');
+                    if (name === 'birthday_photos') {
+                        return JSON.parse(decodeURIComponent(value));
+                    }
+                }
+            } catch (e) {
+                console.log('Could not load stored photos');
+            }
+            return {};
+        }
+
+        function loadStoredPhotos() {
+            const photos = getStoredPhotos();
+            for (let photoKey in photos) {
+                const photoNumber = photoKey.replace('photo', '');
+                const placeholder = document.getElementById('placeholder' + photoNumber);
+                if (placeholder && photos[photoKey]) {
+                    placeholder.innerHTML = '<img src="' + photos[photoKey] + '" alt="Birthday Memory ' + photoNumber + '">';
+                }
             }
         }
 
@@ -465,18 +507,4 @@
 
         // Preload images
         const imageData = [
-            'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAH0ASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/Z', // Placeholder for first image
-            null, null, null, null, null, null, null, null, null // Will be replaced with actual images
-        ];
-
-        // Auto play celebration on load
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                for (let i = 0; i < 50; i++) {
-                    setTimeout(createConfetti, i * 100);
-                }
-            }, 1000);
-        });
-    </script>
-</body>
-</html>
+            'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAH0ASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZna
